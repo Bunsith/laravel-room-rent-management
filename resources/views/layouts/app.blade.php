@@ -12,14 +12,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg rr-navbar navbar-dark">
+    <nav class="navbar navbar-expand-lg rr-navbar navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand rr-brand" href="{{ route('dashboard') }}">ROOM RENTAL</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-bullets">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}" href="{{ route('rooms.index') }}">Room</a>
                     </li>
@@ -43,7 +43,7 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto align-items-lg-center">
-                    <li class="nav-item d-flex align-items-center text-white me-3 rr-welcome">
+                    <li class="nav-item d-flex align-items-center me-3 rr-welcome">
                         <i class="bi bi-person-circle me-2"></i>
                         <span>Welcome, {{ auth()->user()->name ?? 'User' }}</span>
                     </li>
@@ -70,7 +70,7 @@
         </div>
     </nav>
 
-    <main class="container-fluid rr-page py-4">
+    <main class="container-fluid rr-page">
         @include('partials.alerts')
         @yield('content')
     </main>

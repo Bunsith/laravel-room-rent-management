@@ -20,7 +20,7 @@
                 <div class="card-header bg-white">
                     <h5 class="mb-0">Payment Detail</h5>
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body p-3">
                     <div class="table-responsive">
                         <table class="table mb-0">
                             <thead>

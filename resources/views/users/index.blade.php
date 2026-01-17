@@ -17,7 +17,7 @@
     </div>
 
     <div class="card">
-        <div class="card-body p-0">
+        <div class="card-body p-3">
             <div class="table-responsive">
                 <table class="table mb-0">
                     <thead>

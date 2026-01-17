@@ -82,7 +82,7 @@
                     <input type="text" name="search" class="form-control" placeholder="Search note">
                 </form>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body p-3">
                 <div class="table-responsive">
                     <table class="table mb-0">
                         <thead>
