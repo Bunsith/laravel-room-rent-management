@@ -8,16 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::dropIfExists('role_permissions');
+    }
+
+    public function down(): void
+    {
         Schema::create('role_permissions', function (Blueprint $table) {
             $table->id();
             $table->string('role')->unique();
             $table->json('permissions')->nullable();
             $table->timestamps();
         });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('role_permissions');
     }
 };

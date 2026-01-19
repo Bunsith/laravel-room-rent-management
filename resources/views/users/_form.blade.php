@@ -12,9 +12,11 @@
     <div class="col-md-6">
         <label class="form-label">Role</label>
         <select name="role" class="form-select">
-            @php($roles = config('permissions.roles', ['admin' => 'Admin', 'staff' => 'Staff']))
-            @foreach ($roles as $value => $label)
-                <option value="{{ $value }}" @selected(old('role', $user->role ?? 'staff') === $value)>{{ $label }}</option>
+            @foreach ($roles as $role)
+                @php($roleName = $role->name)
+                <option value="{{ $roleName }}" @selected(old('role', $user->roles->first()?->name ?? $user->role ?? 'staff') === $roleName)>
+                    {{ ucfirst($roleName) }}
+                </option>
             @endforeach
         </select>
         <x-input-error for="role" />

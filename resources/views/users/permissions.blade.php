@@ -15,19 +15,21 @@
         @csrf
         @method('PUT')
 
-        @foreach ($roles as $role => $label)
+        @foreach ($roles as $role)
+            @php($roleName = $role->name)
+            @php($label = $roleLabels[$roleName] ?? ucfirst($roleName))
             <div class="card mb-4">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="mb-1">{{ $label }}</h5>
-                        <small class="text-muted text-uppercase">{{ $role }}</small>
+                        <small class="text-muted text-uppercase">{{ $roleName }}</small>
                     </div>
-                    @if ($role === 'admin')
+                    @if ($roleName === 'admin')
                         <span class="badge bg-secondary">Full access</span>
                     @endif
                 </div>
                 <div class="card-body">
-                    @if ($role === 'admin')
+                    @if ($roleName === 'admin')
                         <p class="text-muted mb-0">Admins always have full access to every section.</p>
                     @else
                         <div class="row g-3">
@@ -38,8 +40,8 @@
                                         @foreach ($group['permissions'] as $permission => $permissionLabel)
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox"
-                                                    name="permissions[{{ $role }}][]" value="{{ $permission }}"
-                                                    @checked(in_array($permission, $currentPermissions[$role] ?? [], true))>
+                                                    name="permissions[{{ $roleName }}][]" value="{{ $permission }}"
+                                                    @checked(in_array($permission, $currentPermissions[$roleName] ?? [], true))>
                                                 <label class="form-check-label">{{ $permissionLabel }}</label>
                                             </div>
                                         @endforeach

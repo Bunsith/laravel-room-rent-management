@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RolePermission;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RolePermissionController extends Controller
 {
@@ -14,29 +15,29 @@ class RolePermissionController extends Controller
     {
         Gate::authorize('permissions.manage');
 
-        $roles = config('permissions.roles', []);
         $permissionGroups = config('permissions.groups', []);
-        $allPermissions = $this->flattenPermissions($permissionGroups);
-        $stored = RolePermission::whereIn('role', array_keys($roles))->get()->keyBy('role');
+        $allPermissions = $this->ensurePermissions($permissionGroups);
+
+        $labels = config('permissions.roles', []);
+        foreach (array_keys($labels) as $roleName) {
+            Role::findOrCreate($roleName);
+        }
+
+        $roles = Role::with('permissions')->orderBy('name')->get();
 
         $current = [];
-        foreach ($roles as $role => $label) {
-            if ($role === 'admin') {
-                $current[$role] = array_keys($allPermissions);
+        foreach ($roles as $role) {
+            if ($role->name === 'admin') {
+                $current[$role->name] = array_keys($allPermissions);
                 continue;
             }
 
-            if ($stored->has($role)) {
-                $current[$role] = array_values(array_unique($stored->get($role)->permissions ?? []));
-                continue;
-            }
-
-            $defaults = config('permissions.defaults.' . $role, []);
-            $current[$role] = array_keys(array_filter($defaults));
+            $current[$role->name] = $role->permissions->pluck('name')->all();
         }
 
         return view('users.permissions', [
             'roles' => $roles,
+            'roleLabels' => $labels,
             'permissionGroups' => $permissionGroups,
             'currentPermissions' => $current,
         ]);
@@ -46,33 +47,32 @@ class RolePermissionController extends Controller
     {
         Gate::authorize('permissions.manage');
 
-        $roles = config('permissions.roles', []);
         $permissionGroups = config('permissions.groups', []);
-        $allPermissions = array_keys($this->flattenPermissions($permissionGroups));
+        $allPermissions = array_keys($this->ensurePermissions($permissionGroups));
         $input = $request->input('permissions', []);
 
-        foreach ($roles as $role => $label) {
-            if ($role === 'admin') {
+        $roles = Role::all();
+        foreach ($roles as $role) {
+            if ($role->name === 'admin') {
+                $role->syncPermissions($allPermissions);
                 continue;
             }
 
-            $selected = array_values(array_intersect($allPermissions, $input[$role] ?? []));
-            RolePermission::updateOrCreate(
-                ['role' => $role],
-                ['permissions' => $selected]
-            );
+            $selected = array_values(array_intersect($allPermissions, $input[$role->name] ?? []));
+            $role->syncPermissions($selected);
         }
 
         return back()->with('status', 'Role permissions updated successfully.');
     }
 
-    private function flattenPermissions(array $groups): array
+    private function ensurePermissions(array $groups): array
     {
         $permissions = [];
 
         foreach ($groups as $group) {
             foreach ($group['permissions'] ?? [] as $key => $label) {
                 $permissions[$key] = $label;
+                Permission::findOrCreate($key);
             }
         }
 

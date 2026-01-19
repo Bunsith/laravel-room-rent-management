@@ -8,6 +8,6 @@ class UserPolicy
 {
     public function delete(User $user, User $target): bool
     {
-        return $user->hasPermission('users.manage') && $user->id !== $target->id;
+        return $user->can('users.manage') && $user->id !== $target->id;
     }
 }

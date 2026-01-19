@@ -41,7 +41,11 @@
                             <tr>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td><span class="badge bg-secondary">{{ ucfirst($user->role) }}</span></td>
+                                <td>
+                                    <span class="badge bg-secondary">
+                                        {{ ucfirst($user->roles->first()?->name ?? $user->role ?? 'staff') }}
+                                    </span>
+                                </td>
                                 <td class="d-flex gap-1">
                                     @can('users.manage')
                                         <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-primary action-btn">

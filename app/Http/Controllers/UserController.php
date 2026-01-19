@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -15,7 +16,7 @@ class UserController extends Controller
     {
         Gate::authorize('users.view');
 
-        $users = User::orderBy('name')->paginate(10);
+        $users = User::with('roles')->orderBy('name')->paginate(10);
 
         return view('users.index', [
             'users' => $users,
@@ -28,6 +29,7 @@ class UserController extends Controller
 
         return view('users.create', [
             'user' => new User(),
+            'roles' => Role::orderBy('name')->get(),
         ]);
     }
 
@@ -38,7 +40,11 @@ class UserController extends Controller
         $payload = $request->validated();
         $payload['password'] = Hash::make($payload['password']);
 
-        User::create($payload);
+        $roleName = $payload['role'];
+        Role::findOrCreate($roleName);
+
+        $user = User::create($payload);
+        $user->syncRoles([$roleName]);
 
         return redirect()->route('users.index')->with('status', 'User created successfully.');
     }
@@ -49,6 +55,7 @@ class UserController extends Controller
 
         return view('users.edit', [
             'user' => $user,
+            'roles' => Role::orderBy('name')->get(),
         ]);
     }
 
@@ -65,6 +72,9 @@ class UserController extends Controller
         }
 
         $user->update($payload);
+        $roleName = $payload['role'];
+        Role::findOrCreate($roleName);
+        $user->syncRoles([$roleName]);
 
         return redirect()->route('users.index')->with('status', 'User updated successfully.');
     }
