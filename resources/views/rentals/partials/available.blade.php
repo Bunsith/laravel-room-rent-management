@@ -43,9 +43,11 @@
                                                     <option value="{{ $customer->id }}">{{ $customer->full_name }}</option>
                                                 @endforeach
                                             </select>
-                                            <a href="{{ route('customers.create') }}" class="btn btn-outline-secondary">
-                                                <i class="bi bi-plus"></i>
-                                            </a>
+                                            @can('customers.manage')
+                                                <a href="{{ route('customers.create') }}" class="btn btn-outline-secondary">
+                                                    <i class="bi bi-plus"></i>
+                                                </a>
+                                            @endcan
                                         </div>
                                     </div>
                                     <div style="min-width:90px;">
@@ -62,8 +64,10 @@
                                         <input type="text" name="note" class="form-control" placeholder="Note">
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <button class="btn btn-outline-primary" type="submit" name="print" value="1">Save & Print</button>
-                                        <button class="btn btn-primary" type="submit">Rent</button>
+                                        @can('rentals.manage')
+                                            <button class="btn btn-outline-primary" type="submit" name="print" value="1">Save & Print</button>
+                                            <button class="btn btn-primary" type="submit">Rent</button>
+                                        @endcan
                                     </div>
                                 </form>
                             </td>

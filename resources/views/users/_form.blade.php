@@ -12,7 +12,8 @@
     <div class="col-md-6">
         <label class="form-label">Role</label>
         <select name="role" class="form-select">
-            @foreach (['admin' => 'Admin', 'staff' => 'Staff'] as $value => $label)
+            @php($roles = config('permissions.roles', ['admin' => 'Admin', 'staff' => 'Staff']))
+            @foreach ($roles as $value => $label)
                 <option value="{{ $value }}" @selected(old('role', $user->role ?? 'staff') === $value)>{{ $label }}</option>
             @endforeach
         </select>

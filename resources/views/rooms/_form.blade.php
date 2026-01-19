@@ -1,6 +1,6 @@
 <div class="row g-4">
     <div class="col-lg-4">
-        <div class="upload-preview">
+        <div class="upload-preview" id="room-photo-preview">
             @if ($room->photo)
                 <img src="{{ \Illuminate\Support\Facades\Storage::url($room->photo) }}" alt="Room photo">
             @else
@@ -10,7 +10,7 @@
                 </div>
             @endif
         </div>
-        <input type="file" name="photo" class="form-control mt-3">
+        <input type="file" name="photo" class="form-control mt-3" accept="image/*" data-preview="#room-photo-preview">
         <x-input-error for="photo" />
     </div>
     <div class="col-lg-8">

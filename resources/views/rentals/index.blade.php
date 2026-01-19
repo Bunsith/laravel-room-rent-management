@@ -10,19 +10,37 @@
         </div>
     </div>
 
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <a class="nav-link {{ $tab === 'available' ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'available']) }}">Available Room</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ $tab === 'rented' ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'rented']) }}">Rented Room</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ $tab === 'collection' ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'collection']) }}">Rental Collection</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ $tab === 'journal' ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'journal']) }}">Journal Entries</a>
-        </li>
+    <ul class="nav nav-pills rr-tabs mb-4">
+        @can('rentals.view')
+            <li class="nav-item">
+                <a class="nav-link {{ $tab === 'available' ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'available']) }}">
+                    <i class="bi bi-house-door"></i>
+                    <span>Available Room</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $tab === 'rented' ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'rented']) }}">
+                    <i class="bi bi-door-closed"></i>
+                    <span>Rented Room</span>
+                </a>
+            </li>
+        @endcan
+        @can('collections.view')
+            <li class="nav-item">
+                <a class="nav-link {{ $tab === 'collection' ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'collection']) }}">
+                    <i class="bi bi-cash-stack"></i>
+                    <span>Rental Collection</span>
+                </a>
+            </li>
+        @endcan
+        @can('journal.view')
+            <li class="nav-item">
+                <a class="nav-link {{ $tab === 'journal' ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'journal']) }}">
+                    <i class="bi bi-journal-text"></i>
+                    <span>Journal Entries</span>
+                </a>
+            </li>
+        @endcan
     </ul>
 
     <div class="tab-content">

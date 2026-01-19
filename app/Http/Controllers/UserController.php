@@ -13,6 +13,8 @@ class UserController extends Controller
 {
     public function index(): View
     {
+        Gate::authorize('users.view');
+
         $users = User::orderBy('name')->paginate(10);
 
         return view('users.index', [
@@ -22,7 +24,7 @@ class UserController extends Controller
 
     public function create(): View
     {
-        Gate::authorize('admin-only');
+        Gate::authorize('users.manage');
 
         return view('users.create', [
             'user' => new User(),
@@ -31,7 +33,7 @@ class UserController extends Controller
 
     public function store(UserRequest $request): RedirectResponse
     {
-        Gate::authorize('admin-only');
+        Gate::authorize('users.manage');
 
         $payload = $request->validated();
         $payload['password'] = Hash::make($payload['password']);
@@ -43,7 +45,7 @@ class UserController extends Controller
 
     public function edit(User $user): View
     {
-        Gate::authorize('admin-only');
+        Gate::authorize('users.manage');
 
         return view('users.edit', [
             'user' => $user,
@@ -52,7 +54,7 @@ class UserController extends Controller
 
     public function update(UserRequest $request, User $user): RedirectResponse
     {
-        Gate::authorize('admin-only');
+        Gate::authorize('users.manage');
 
         $payload = $request->validated();
 

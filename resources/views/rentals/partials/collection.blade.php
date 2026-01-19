@@ -50,13 +50,17 @@
                                 @endif
                             </td>
                             <td class="d-flex gap-1">
-                                <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-primary action-btn">Pay</a>
+                                @can('collections.manage')
+                                    <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-primary action-btn">Pay</a>
+                                @endcan
                                 <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-outline-secondary action-btn">Detail</a>
-                                <form method="post" action="{{ route('invoices.destroy', $invoice) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-danger action-btn" type="submit">Delete</button>
-                                </form>
+                                @can('collections.manage')
+                                    <form method="post" action="{{ route('invoices.destroy', $invoice) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger action-btn" type="submit">Delete</button>
+                                    </form>
+                                @endcan
                                 <a href="{{ route('invoices.print', $invoice) }}" class="btn btn-sm btn-outline-primary action-btn">Invoice</a>
                             </td>
                         </tr>

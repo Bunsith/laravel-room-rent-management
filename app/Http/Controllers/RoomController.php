@@ -9,6 +9,7 @@ use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -16,6 +17,8 @@ class RoomController extends Controller
 {
     public function index(Request $request): View
     {
+        Gate::authorize('rooms.view');
+
         $search = $request->string('search')->toString();
 
         $rooms = Room::with(['floor', 'roomType', 'facilities'])
@@ -40,6 +43,8 @@ class RoomController extends Controller
 
     public function create(): View
     {
+        Gate::authorize('rooms.manage');
+
         return view('rooms.create', [
             'floors' => Floor::orderBy('name')->get(),
             'roomTypes' => RoomType::orderBy('name')->get(),
@@ -50,6 +55,8 @@ class RoomController extends Controller
 
     public function store(RoomRequest $request): RedirectResponse
     {
+        Gate::authorize('rooms.manage');
+
         $payload = $request->validated();
 
         if ($request->hasFile('photo')) {
@@ -64,6 +71,8 @@ class RoomController extends Controller
 
     public function edit(Room $room): View
     {
+        Gate::authorize('rooms.manage');
+
         return view('rooms.edit', [
             'room' => $room->load('facilities'),
             'floors' => Floor::orderBy('name')->get(),
@@ -74,6 +83,8 @@ class RoomController extends Controller
 
     public function update(RoomRequest $request, Room $room): RedirectResponse
     {
+        Gate::authorize('rooms.manage');
+
         $payload = $request->validated();
 
         if ($request->hasFile('photo')) {
@@ -91,6 +102,8 @@ class RoomController extends Controller
 
     public function destroy(Room $room): RedirectResponse
     {
+        Gate::authorize('rooms.manage');
+
         if ($room->photo) {
             Storage::disk('public')->delete($room->photo);
         }

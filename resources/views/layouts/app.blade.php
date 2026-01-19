@@ -20,27 +20,41 @@
             </button>
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}" href="{{ route('rooms.index') }}">Room</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}">Customer</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('rentals.*') && in_array(request('tab', 'available'), ['available', 'rented'], true) ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'available']) }}">Rental</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request('tab') === 'collection' || request()->routeIs('invoices.*') ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'collection']) }}">Collection</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request('tab') === 'journal' || request()->routeIs('journal-entries.*') ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'journal']) }}">Account</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">Users</a>
-                    </li>
+                    @can('rooms.view')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}" href="{{ route('rooms.index') }}">Room</a>
+                        </li>
+                    @endcan
+                    @can('customers.view')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}">Customer</a>
+                        </li>
+                    @endcan
+                    @can('rentals.view')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('rentals.*') && in_array(request('tab', 'available'), ['available', 'rented'], true) ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'available']) }}">Rental</a>
+                        </li>
+                    @endcan
+                    @can('collections.view')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request('tab') === 'collection' || request()->routeIs('invoices.*') ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'collection']) }}">Collection</a>
+                        </li>
+                    @endcan
+                    @can('journal.view')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request('tab') === 'journal' || request()->routeIs('journal-entries.*') ? 'active' : '' }}" href="{{ route('rentals.index', ['tab' => 'journal']) }}">Account</a>
+                        </li>
+                    @endcan
+                    @can('reports.view')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">Reports</a>
+                        </li>
+                    @endcan
+                    @can('users.view')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">Users</a>
+                        </li>
+                    @endcan
                 </ul>
                 <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item d-flex align-items-center me-3 rr-welcome">
@@ -53,10 +67,12 @@
                             Settings
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item" href="{{ route('settings.index') }}">App Settings</a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
+                            @can('settings.manage')
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('settings.index') }}">App Settings</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            @endcan
                             <li>
                                 <form method="post" action="{{ route('logout') }}">
                                     @csrf

@@ -24,7 +24,7 @@ class UserRequest extends FormRequest
                 'max:255',
                 Rule::unique('users', 'email')->ignore($userId),
             ],
-            'role' => ['required', 'in:admin,staff'],
+            'role' => ['required', Rule::in(array_keys(config('permissions.roles', ['admin' => 'Admin', 'staff' => 'Staff'])))],
             'password' => [$userId ? 'nullable' : 'required', 'string', 'min:8'],
         ];
     }

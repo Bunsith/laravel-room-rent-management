@@ -8,10 +8,26 @@
             <h2 class="page-title mb-1">Room List</h2>
             <p class="text-muted">Manage room inventory and facilities.</p>
         </div>
-        <a href="{{ route('rooms.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg me-1"></i>
-            Add New
-        </a>
+        <div class="d-flex flex-wrap gap-2">
+            @can('rooms.manage')
+                <a href="{{ route('rooms.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Add New
+                </a>
+            @endcan
+            @can('floors.manage')
+                <a href="{{ route('floors.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-layers me-1"></i>
+                    Floors
+                </a>
+            @endcan
+            @can('room_types.manage')
+                <a href="{{ route('room-types.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-grid-1x2 me-1"></i>
+                    Room Types
+                </a>
+            @endcan
+        </div>
     </div>
 
     <div class="card">
@@ -59,16 +75,18 @@
                                     @endforeach
                                 </td>
                                 <td>
-                                    <a href="{{ route('rooms.edit', $room) }}" class="btn btn-sm btn-primary action-btn">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form method="post" action="{{ route('rooms.destroy', $room) }}" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger action-btn" type="submit">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    @can('rooms.manage')
+                                        <a href="{{ route('rooms.edit', $room) }}" class="btn btn-sm btn-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form method="post" action="{{ route('rooms.destroy', $room) }}" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger action-btn" type="submit">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endcan
                                 </td>
                             </tr>
                         @empty

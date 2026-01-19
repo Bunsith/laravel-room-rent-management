@@ -9,6 +9,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class InvoiceController extends Controller
@@ -19,6 +20,8 @@ class InvoiceController extends Controller
 
     public function index(Request $request): View
     {
+        Gate::authorize('collections.view');
+
         $search = $request->string('search')->toString();
 
         $invoices = Invoice::with(['rental.room', 'rental.customer'])
@@ -44,6 +47,8 @@ class InvoiceController extends Controller
 
     public function show(Invoice $invoice): View
     {
+        Gate::authorize('collections.view');
+
         $invoice->load(['items', 'payments', 'rental.room', 'rental.customer']);
 
         return view('invoices.show', [
@@ -53,6 +58,8 @@ class InvoiceController extends Controller
 
     public function pay(PaymentRequest $request, Invoice $invoice): RedirectResponse
     {
+        Gate::authorize('collections.manage');
+
         $this->invoiceService->addPayment($invoice, $request->validated());
 
         return back()->with('status', 'Payment recorded successfully.');
@@ -60,6 +67,8 @@ class InvoiceController extends Controller
 
     public function destroy(Invoice $invoice): RedirectResponse
     {
+        Gate::authorize('collections.manage');
+
         $invoice->delete();
 
         return back()->with('status', 'Invoice deleted successfully.');
@@ -67,6 +76,8 @@ class InvoiceController extends Controller
 
     public function print(Invoice $invoice)
     {
+        Gate::authorize('collections.view');
+
         $invoice->load(['items', 'payments', 'rental.room', 'rental.customer']);
 
         if (class_exists(Dompdf::class)) {

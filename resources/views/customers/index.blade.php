@@ -8,10 +8,12 @@
             <h2 class="page-title mb-1">Customer List</h2>
             <p class="text-muted">Manage customer profiles and documents.</p>
         </div>
-        <a href="{{ route('customers.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg me-1"></i>
-            Add New
-        </a>
+        @can('customers.manage')
+            <a href="{{ route('customers.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i>
+                Add New
+            </a>
+        @endcan
     </div>
 
     <div class="card">
@@ -75,16 +77,18 @@
                                 </td>
                                 <td>{{ \Illuminate\Support\Str::limit($customer->note, 20) }}</td>
                                 <td class="d-flex gap-1">
-                                    <a href="{{ route('customers.edit', $customer) }}" class="btn btn-sm btn-primary action-btn">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form method="post" action="{{ route('customers.destroy', $customer) }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger action-btn" type="submit">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    @can('customers.manage')
+                                        <a href="{{ route('customers.edit', $customer) }}" class="btn btn-sm btn-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form method="post" action="{{ route('customers.destroy', $customer) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger action-btn" type="submit">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endcan
                                 </td>
                             </tr>
                         @empty

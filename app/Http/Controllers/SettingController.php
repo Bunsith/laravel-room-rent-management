@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SettingRequest;
 use App\Models\Setting;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -12,6 +13,8 @@ class SettingController extends Controller
 {
     public function index(): View
     {
+        Gate::authorize('settings.manage');
+
         return view('settings.index', [
             'setting' => Setting::first() ?? new Setting(),
         ]);
@@ -19,6 +22,8 @@ class SettingController extends Controller
 
     public function update(SettingRequest $request): RedirectResponse
     {
+        Gate::authorize('settings.manage');
+
         $payload = $request->validated();
         $setting = Setting::first() ?? new Setting();
 

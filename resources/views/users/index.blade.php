@@ -8,12 +8,20 @@
             <h2 class="page-title mb-1">Users</h2>
             <p class="text-muted">Manage admin and staff accounts.</p>
         </div>
-        @can('admin-only')
-            <a href="{{ route('users.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-lg me-1"></i>
-                Add User
-            </a>
-        @endcan
+        <div class="d-flex gap-2">
+            @can('permissions.manage')
+                <a href="{{ route('users.permissions.edit') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-shield-lock me-1"></i>
+                    Role Permissions
+                </a>
+            @endcan
+            @can('users.manage')
+                <a href="{{ route('users.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Add User
+                </a>
+            @endcan
+        </div>
     </div>
 
     <div class="card">
@@ -35,7 +43,7 @@
                                 <td>{{ $user->email }}</td>
                                 <td><span class="badge bg-secondary">{{ ucfirst($user->role) }}</span></td>
                                 <td class="d-flex gap-1">
-                                    @can('admin-only')
+                                    @can('users.manage')
                                         <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-primary action-btn">
                                             <i class="bi bi-pencil"></i>
                                         </a>

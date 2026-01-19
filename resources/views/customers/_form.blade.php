@@ -1,6 +1,6 @@
 <div class="row g-4">
     <div class="col-lg-4">
-        <div class="upload-preview">
+        <div class="upload-preview" id="customer-photo-preview">
             @if ($customer->photo)
                 <img src="{{ \Illuminate\Support\Facades\Storage::url($customer->photo) }}" alt="Customer photo">
             @else
@@ -10,7 +10,7 @@
                 </div>
             @endif
         </div>
-        <input type="file" name="photo" class="form-control mt-3">
+        <input type="file" name="photo" class="form-control mt-3" accept="image/*" data-preview="#customer-photo-preview">
         <x-input-error for="photo" />
         <div class="mt-3">
             <label class="form-label">Attachments</label>

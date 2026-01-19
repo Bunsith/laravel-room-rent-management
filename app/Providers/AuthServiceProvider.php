@@ -17,8 +17,32 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::before(function (User $user) {
+            return $user->isAdmin() ? true : null;
+        });
+
         Gate::define('admin-only', function (User $user): bool {
             return $user->isAdmin();
         });
+
+        foreach ($this->permissionKeys() as $permission) {
+            Gate::define($permission, function (User $user) use ($permission): bool {
+                return $user->hasPermission($permission);
+            });
+        }
+    }
+
+    private function permissionKeys(): array
+    {
+        $groups = config('permissions.groups', []);
+        $permissions = [];
+
+        foreach ($groups as $group) {
+            foreach ($group['permissions'] ?? [] as $key => $label) {
+                $permissions[] = $key;
+            }
+        }
+
+        return $permissions;
     }
 }

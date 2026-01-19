@@ -17,71 +17,75 @@
                     <h5 class="mb-0">New Entry</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('journal-entries.store') }}" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-3">
-                            <label class="form-label">Date</label>
-                            <input type="date" name="date" class="form-control" value="{{ now()->toDateString() }}">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Note</label>
-                            <textarea name="note" class="form-control" rows="2"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Account Type</label>
-                            <select name="account_type_id" class="form-select">
-                                <option value="">Select</option>
-                                @foreach ($accountTypes as $type)
-                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Resources Budget</label>
-                            <select name="resource_budget_id" class="form-select">
-                                <option value="">Select</option>
-                                @foreach ($resourceBudgets as $budget)
-                                    <option value="{{ $budget->id }}">{{ $budget->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Amount</label>
-                            <input type="number" step="0.01" name="amount" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Currency</label>
-                            <select name="currency" class="form-select">
-                                <option value="USD">USD</option>
-                                <option value="KHR">KHR</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Method</label>
-                            <select name="method" class="form-select">
-                                <option value="CASH">CASH</option>
-                                <option value="ABA">ABA</option>
-                                <option value="BANK">BANK</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Floor</label>
-                            <select name="floor_id" class="form-select">
-                                <option value="">Select</option>
-                                @foreach ($floors as $floor)
-                                    <option value="{{ $floor->id }}">{{ $floor->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Ref Files</label>
-                            <input type="file" name="attachment" class="form-control">
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-primary" type="submit">Save</button>
-                            <button class="btn btn-outline-secondary" type="reset">Cancel</button>
-                        </div>
-                    </form>
+                    @can('journal.manage')
+                        <form method="post" action="{{ route('journal-entries.store') }}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label">Date</label>
+                                <input type="date" name="date" class="form-control" value="{{ now()->toDateString() }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Note</label>
+                                <textarea name="note" class="form-control" rows="2"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Account Type</label>
+                                <select name="account_type_id" class="form-select">
+                                    <option value="">Select</option>
+                                    @foreach ($accountTypes as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Resources Budget</label>
+                                <select name="resource_budget_id" class="form-select">
+                                    <option value="">Select</option>
+                                    @foreach ($resourceBudgets as $budget)
+                                        <option value="{{ $budget->id }}">{{ $budget->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Amount</label>
+                                <input type="number" step="0.01" name="amount" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Currency</label>
+                                <select name="currency" class="form-select">
+                                    <option value="USD">USD</option>
+                                    <option value="KHR">KHR</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Method</label>
+                                <select name="method" class="form-select">
+                                    <option value="CASH">CASH</option>
+                                    <option value="ABA">ABA</option>
+                                    <option value="BANK">BANK</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Floor</label>
+                                <select name="floor_id" class="form-select">
+                                    <option value="">Select</option>
+                                    @foreach ($floors as $floor)
+                                        <option value="{{ $floor->id }}">{{ $floor->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ref Files</label>
+                                <input type="file" name="attachment" class="form-control">
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary" type="submit">Save</button>
+                                <button class="btn btn-outline-secondary" type="reset">Cancel</button>
+                            </div>
+                        </form>
+                    @else
+                        <div class="text-muted">You do not have permission to create journal entries.</div>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -126,53 +130,57 @@
                                                 -
                                             @endif
                                         </td>
-                                        <td class="d-flex gap-1">
-                                            <button class="btn btn-sm btn-outline-secondary action-btn" data-bs-toggle="collapse" data-bs-target="#edit-entry-{{ $entry->id }}">
-                                                <i class="bi bi-pencil"></i>
+                                <td class="d-flex gap-1">
+                                    @can('journal.manage')
+                                        <button class="btn btn-sm btn-outline-secondary action-btn" data-bs-toggle="collapse" data-bs-target="#edit-entry-{{ $entry->id }}">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <form method="post" action="{{ route('journal-entries.destroy', $entry) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger action-btn" type="submit">
+                                                <i class="bi bi-trash"></i>
                                             </button>
-                                            <form method="post" action="{{ route('journal-entries.destroy', $entry) }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-danger action-btn" type="submit">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr class="collapse" id="edit-entry-{{ $entry->id }}">
-                                        <td colspan="9">
-                                            <form method="post" action="{{ route('journal-entries.update', $entry) }}" enctype="multipart/form-data" class="row g-2">
-                                                @csrf
-                                                @method('PUT')
-                                                <div class="col-md-2">
-                                                    <input type="date" name="date" class="form-control" value="{{ $entry->date?->format('Y-m-d') }}">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input type="text" name="note" class="form-control" value="{{ $entry->note }}">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input type="number" step="0.01" name="amount" class="form-control" value="{{ $entry->amount }}">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <select name="method" class="form-select">
-                                                        @foreach (['CASH', 'ABA', 'BANK'] as $method)
-                                                            <option value="{{ $method }}" @selected($entry->method === $method)>{{ $method }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <select name="currency" class="form-select">
-                                                        @foreach (['USD', 'KHR'] as $currency)
-                                                            <option value="{{ $currency }}" @selected($entry->currency === $currency)>{{ $currency }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <button class="btn btn-primary w-100" type="submit">Update</button>
-                                                </div>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                        </form>
+                                    @endcan
+                                </td>
+                            </tr>
+                            @can('journal.manage')
+                                <tr class="collapse" id="edit-entry-{{ $entry->id }}">
+                                    <td colspan="9">
+                                        <form method="post" action="{{ route('journal-entries.update', $entry) }}" enctype="multipart/form-data" class="row g-2">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="col-md-2">
+                                                <input type="date" name="date" class="form-control" value="{{ $entry->date?->format('Y-m-d') }}">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" name="note" class="form-control" value="{{ $entry->note }}">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="number" step="0.01" name="amount" class="form-control" value="{{ $entry->amount }}">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <select name="method" class="form-select">
+                                                    @foreach (['CASH', 'ABA', 'BANK'] as $method)
+                                                        <option value="{{ $method }}" @selected($entry->method === $method)>{{ $method }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <select name="currency" class="form-select">
+                                                    @foreach (['USD', 'KHR'] as $currency)
+                                                        <option value="{{ $currency }}" @selected($entry->currency === $currency)>{{ $currency }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button class="btn btn-primary w-100" type="submit">Update</button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endcan
                                 @empty
                                     <tr>
                                         <td colspan="9" class="text-center text-muted py-4">No journal entries.</td>

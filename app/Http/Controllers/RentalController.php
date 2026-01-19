@@ -15,6 +15,7 @@ use App\Models\Room;
 use App\Services\RentalService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class RentalController extends Controller
@@ -26,6 +27,7 @@ class RentalController extends Controller
     public function index(Request $request): View
     {
         $tab = $request->string('tab')->toString() ?: 'available';
+        $this->authorizeTab($tab);
 
         $availableRooms = collect();
         $customers = collect();
@@ -85,6 +87,8 @@ class RentalController extends Controller
 
     public function store(RentalRequest $request): RedirectResponse
     {
+        Gate::authorize('rentals.manage');
+
         $payload = $request->validated();
 
         $isAvailable = Room::available()->where('id', $payload['room_id'])->exists();
@@ -104,6 +108,8 @@ class RentalController extends Controller
 
     public function update(RentalUpdateRequest $request, Rental $rental): RedirectResponse
     {
+        Gate::authorize('rentals.manage');
+
         $rental->update($request->validated());
 
         return back()->with('status', 'Rental updated successfully.');
@@ -111,8 +117,25 @@ class RentalController extends Controller
 
     public function checkOut(Request $request, Rental $rental): RedirectResponse
     {
+        Gate::authorize('rentals.manage');
+
         $this->rentalService->checkOut($rental, $request->input('check_out'));
 
         return back()->with('status', 'Rental checked out successfully.');
+    }
+
+    private function authorizeTab(string $tab): void
+    {
+        if ($tab === 'collection') {
+            Gate::authorize('collections.view');
+            return;
+        }
+
+        if ($tab === 'journal') {
+            Gate::authorize('journal.view');
+            return;
+        }
+
+        Gate::authorize('rentals.view');
     }
 }

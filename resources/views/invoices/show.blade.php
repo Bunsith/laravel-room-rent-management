@@ -80,30 +80,34 @@
                     <h5 class="mb-0">Record Payment</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('invoices.pay', $invoice) }}">
-                        @csrf
-                        <div class="mb-3">
-                            <label class="form-label">Amount</label>
-                            <input type="number" step="0.01" name="amount" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Method</label>
-                            <select name="method" class="form-select">
-                                <option value="CASH">CASH</option>
-                                <option value="ABA">ABA</option>
-                                <option value="BANK">BANK</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Paid At</label>
-                            <input type="datetime-local" name="paid_at" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Note</label>
-                            <textarea name="note" class="form-control" rows="2"></textarea>
-                        </div>
-                        <button class="btn btn-primary w-100" type="submit">Pay</button>
-                    </form>
+                    @can('collections.manage')
+                        <form method="post" action="{{ route('invoices.pay', $invoice) }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label">Amount</label>
+                                <input type="number" step="0.01" name="amount" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Method</label>
+                                <select name="method" class="form-select">
+                                    <option value="CASH">CASH</option>
+                                    <option value="ABA">ABA</option>
+                                    <option value="BANK">BANK</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Paid At</label>
+                                <input type="datetime-local" name="paid_at" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Note</label>
+                                <textarea name="note" class="form-control" rows="2"></textarea>
+                            </div>
+                            <button class="btn btn-primary w-100" type="submit">Pay</button>
+                        </form>
+                    @else
+                        <div class="text-muted">You do not have permission to record payments.</div>
+                    @endcan
                 </div>
             </div>
         </div>

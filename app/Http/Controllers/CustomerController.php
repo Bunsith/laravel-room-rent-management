@@ -6,6 +6,7 @@ use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -13,6 +14,8 @@ class CustomerController extends Controller
 {
     public function index(Request $request): View
     {
+        Gate::authorize('customers.view');
+
         $search = $request->string('search')->toString();
 
         $customers = Customer::with(['phones', 'document'])
@@ -35,6 +38,8 @@ class CustomerController extends Controller
 
     public function create(): View
     {
+        Gate::authorize('customers.manage');
+
         return view('customers.create', [
             'customer' => new Customer(),
             'countries' => $this->countries(),
@@ -43,6 +48,8 @@ class CustomerController extends Controller
 
     public function store(CustomerRequest $request): RedirectResponse
     {
+        Gate::authorize('customers.manage');
+
         $payload = $request->validated();
 
         if ($request->hasFile('photo')) {
@@ -59,6 +66,8 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer): View
     {
+        Gate::authorize('customers.manage');
+
         return view('customers.edit', [
             'customer' => $customer->load(['phones', 'document']),
             'countries' => $this->countries(),
@@ -67,6 +76,8 @@ class CustomerController extends Controller
 
     public function update(CustomerRequest $request, Customer $customer): RedirectResponse
     {
+        Gate::authorize('customers.manage');
+
         $payload = $request->validated();
 
         if ($request->hasFile('photo')) {
@@ -86,6 +97,8 @@ class CustomerController extends Controller
 
     public function destroy(Customer $customer): RedirectResponse
     {
+        Gate::authorize('customers.manage');
+
         $customer->delete();
 
         return redirect()->route('customers.index')->with('status', 'Customer deleted successfully.');

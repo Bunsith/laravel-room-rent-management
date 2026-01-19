@@ -9,6 +9,7 @@ use App\Models\JournalEntry;
 use App\Models\ResourceBudget;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -16,6 +17,8 @@ class JournalEntryController extends Controller
 {
     public function index(Request $request): View
     {
+        Gate::authorize('journal.view');
+
         $search = $request->string('search')->toString();
 
         $entries = JournalEntry::with(['accountType', 'resourceBudget', 'floor'])
@@ -38,6 +41,8 @@ class JournalEntryController extends Controller
 
     public function store(JournalEntryRequest $request): RedirectResponse
     {
+        Gate::authorize('journal.manage');
+
         $payload = $request->validated();
 
         if ($request->hasFile('attachment')) {
@@ -51,6 +56,8 @@ class JournalEntryController extends Controller
 
     public function update(JournalEntryRequest $request, JournalEntry $journalEntry): RedirectResponse
     {
+        Gate::authorize('journal.manage');
+
         $payload = $request->validated();
 
         if ($request->hasFile('attachment')) {
@@ -67,6 +74,8 @@ class JournalEntryController extends Controller
 
     public function destroy(JournalEntry $journalEntry): RedirectResponse
     {
+        Gate::authorize('journal.manage');
+
         $journalEntry->delete();
 
         return back()->with('status', 'Journal entry deleted successfully.');

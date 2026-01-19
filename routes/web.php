@@ -5,11 +5,14 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FloorController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\JournalEntryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RentalController;
+use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomTypeController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('rooms', RoomController::class)->except(['show']);
+    Route::resource('floors', FloorController::class)->except(['show']);
+    Route::resource('room-types', RoomTypeController::class)->except(['show']);
     Route::resource('customers', CustomerController::class);
 
     Route::get('rentals', [RentalController::class, 'index'])->name('rentals.index');
@@ -50,7 +55,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('journal-entries', JournalEntryController::class)->only(['index', 'store', 'update', 'destroy']);
 
-    Route::resource('users', UserController::class);
+    Route::get('users/permissions', [RolePermissionController::class, 'edit'])->name('users.permissions.edit');
+    Route::put('users/permissions', [RolePermissionController::class, 'update'])->name('users.permissions.update');
+    Route::resource('users', UserController::class)->except(['show']);
 
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
