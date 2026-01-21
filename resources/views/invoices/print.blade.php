@@ -34,6 +34,9 @@
         </thead>
         <tbody>
             @foreach ($invoice->items as $item)
+                @if ($item->type === 'service')
+                    @continue
+                @endif
                 <tr>
                     <td>{{ ucfirst($item->type) }}</td>
                     <td>{{ number_format($item->amount, 2) }}</td>
