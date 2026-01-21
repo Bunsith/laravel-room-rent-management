@@ -14,9 +14,13 @@ class Setting extends Model
         'logo',
         'default_currency',
         'deposit_default',
+        'water_rate',
+        'electric_rate',
     ];
 
     protected $casts = [
         'deposit_default' => 'decimal:2',
+        'water_rate' => 'decimal:2',
+        'electric_rate' => 'decimal:2',
     ];
 }

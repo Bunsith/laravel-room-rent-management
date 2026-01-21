@@ -27,6 +27,12 @@
                     Room Types
                 </a>
             @endcan
+            @can('facilities.manage')
+                <a href="{{ route('facilities.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-boxes me-1"></i>
+                    Facilities
+                </a>
+            @endcan
         </div>
     </div>
 

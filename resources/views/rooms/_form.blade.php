@@ -86,7 +86,7 @@
             <div class="col-12 d-flex gap-2">
                 <button class="btn btn-primary" type="submit">Save changes</button>
                 <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">Cancel</a>
-                <a href="{{ route('rooms.index') }}" class="btn btn-link">Back</a>
+                <a href="{{ route('rooms.index') }}" class="btn btn-outline-secondary">Back</a>
             </div>
         </div>
     </div>

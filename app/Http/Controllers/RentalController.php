@@ -12,6 +12,7 @@ use App\Models\JournalEntry;
 use App\Models\Rental;
 use App\Models\ResourceBudget;
 use App\Models\Room;
+use App\Models\Setting;
 use App\Services\RentalService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -82,6 +83,7 @@ class RentalController extends Controller
             'accountTypes' => $accountTypes,
             'resourceBudgets' => $resourceBudgets,
             'floors' => $floors,
+            'setting' => Setting::first(),
         ]);
     }
 

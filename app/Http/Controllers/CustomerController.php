@@ -142,16 +142,6 @@ class CustomerController extends Controller
 
     private function countries(): array
     {
-        return [
-            'Cambodia',
-            'Thailand',
-            'Vietnam',
-            'Malaysia',
-            'China',
-            'Japan',
-            'South Korea',
-            'United States',
-            'United Kingdom',
-        ];
+        return config('countries', []);
     }
 }

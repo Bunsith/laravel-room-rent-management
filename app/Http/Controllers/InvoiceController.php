@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PaymentRequest;
+use App\Http\Requests\InvoiceElectricRequest;
+use App\Http\Requests\InvoiceWaterRequest;
+use App\Http\Requests\InvoiceUtilitiesRequest;
 use App\Models\Invoice;
+use App\Models\Setting;
 use App\Services\InvoiceService;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -72,6 +76,113 @@ class InvoiceController extends Controller
         $invoice->delete();
 
         return back()->with('status', 'Invoice deleted successfully.');
+    }
+
+    public function updateElectric(InvoiceElectricRequest $request, Invoice $invoice): RedirectResponse
+    {
+        Gate::authorize('collections.manage');
+
+        $units = (float) $request->validated()['units'];
+        $rates = $this->utilityRates();
+        $amount = round($units * $rates['electric'], 2);
+
+        $item = $invoice->items()->where('type', 'electric')->first();
+
+        if ($units <= 0) {
+            if ($item) {
+                $item->delete();
+            }
+        } elseif ($item) {
+            $item->update(['amount' => $amount]);
+        } else {
+            $invoice->items()->create([
+                'type' => 'electric',
+                'amount' => $amount,
+            ]);
+        }
+
+        $invoice->recalculateTotals();
+
+        return back()->with('status', 'Electric amount updated successfully.');
+    }
+
+    public function updateWater(InvoiceWaterRequest $request, Invoice $invoice): RedirectResponse
+    {
+        Gate::authorize('collections.manage');
+
+        $units = (float) $request->validated()['units'];
+        $rates = $this->utilityRates();
+        $amount = round($units * $rates['water'], 2);
+
+        $item = $invoice->items()->where('type', 'water')->first();
+
+        if ($units <= 0) {
+            if ($item) {
+                $item->delete();
+            }
+        } elseif ($item) {
+            $item->update(['amount' => $amount]);
+        } else {
+            $invoice->items()->create([
+                'type' => 'water',
+                'amount' => $amount,
+            ]);
+        }
+
+        $invoice->recalculateTotals();
+
+        return back()->with('status', 'Water amount updated successfully.');
+    }
+
+    public function updateUtilities(InvoiceUtilitiesRequest $request, Invoice $invoice): RedirectResponse
+    {
+        Gate::authorize('collections.manage');
+
+        $data = $request->validated();
+        $rates = $this->utilityRates();
+
+        $waterUnits = (float) ($data['water_units'] ?? 0);
+        $electricUnits = (float) ($data['electric_units'] ?? 0);
+
+        $this->syncUtilityItem($invoice, 'water', $waterUnits, $rates['water']);
+        $this->syncUtilityItem($invoice, 'electric', $electricUnits, $rates['electric']);
+
+        $invoice->recalculateTotals();
+
+        return back()->with('status', 'Utilities updated successfully.');
+    }
+
+    private function utilityRates(): array
+    {
+        $setting = Setting::first();
+
+        return [
+            'water' => (float) ($setting->water_rate ?? 0.75),
+            'electric' => (float) ($setting->electric_rate ?? 0.25),
+        ];
+    }
+
+    private function syncUtilityItem(Invoice $invoice, string $type, float $units, float $rate): void
+    {
+        $item = $invoice->items()->where('type', $type)->first();
+        $amount = round($units * $rate, 2);
+
+        if ($units <= 0) {
+            if ($item) {
+                $item->delete();
+            }
+            return;
+        }
+
+        if ($item) {
+            $item->update(['amount' => $amount]);
+            return;
+        }
+
+        $invoice->items()->create([
+            'type' => $type,
+            'amount' => $amount,
+        ]);
     }
 
     public function print(Invoice $invoice)

@@ -28,6 +28,16 @@
                     <x-input-error for="deposit_default" />
                 </div>
                 <div class="col-md-6">
+                    <label class="form-label">Water Rate (per unit)</label>
+                    <input type="number" step="0.01" name="water_rate" class="form-control" value="{{ old('water_rate', $setting->water_rate ?? 0.75) }}">
+                    <x-input-error for="water_rate" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Electric Rate (per unit)</label>
+                    <input type="number" step="0.01" name="electric_rate" class="form-control" value="{{ old('electric_rate', $setting->electric_rate ?? 0.25) }}">
+                    <x-input-error for="electric_rate" />
+                </div>
+                <div class="col-md-6">
                     <label class="form-label">Company Logo</label>
                     <input type="file" name="logo" class="form-control">
                     <x-input-error for="logo" />

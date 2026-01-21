@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\JournalEntryController;
@@ -42,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('rooms', RoomController::class)->except(['show']);
     Route::resource('floors', FloorController::class)->except(['show']);
     Route::resource('room-types', RoomTypeController::class)->except(['show']);
+    Route::resource('facilities', FacilityController::class)->except(['show']);
     Route::resource('customers', CustomerController::class);
 
     Route::get('rentals', [RentalController::class, 'index'])->name('rentals.index');
@@ -51,6 +53,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('invoices', InvoiceController::class)->only(['index', 'show', 'destroy']);
     Route::post('invoices/{invoice}/pay', [InvoiceController::class, 'pay'])->name('invoices.pay');
+    Route::patch('invoices/{invoice}/electric', [InvoiceController::class, 'updateElectric'])->name('invoices.electric.update');
+    Route::patch('invoices/{invoice}/water', [InvoiceController::class, 'updateWater'])->name('invoices.water.update');
+    Route::patch('invoices/{invoice}/utilities', [InvoiceController::class, 'updateUtilities'])->name('invoices.utilities.update');
     Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 
     Route::resource('journal-entries', JournalEntryController::class)->only(['index', 'store', 'update', 'destroy']);

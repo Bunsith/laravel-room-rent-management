@@ -6,6 +6,6 @@
     </div>
     <div class="col-12 d-flex gap-2">
         <button class="btn btn-primary" type="submit">Save</button>
-        <a href="{{ route('floors.index') }}" class="btn btn-link">Back</a>
+        <a href="{{ route('floors.index') }}" class="btn btn-outline-secondary">Back</a>
     </div>
 </div>

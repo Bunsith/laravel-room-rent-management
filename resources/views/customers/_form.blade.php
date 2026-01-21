@@ -95,12 +95,22 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Country</label>
-                <select name="country" class="form-select">
-                    <option value="">Select country</option>
-                    @foreach ($countries as $country)
-                        <option value="{{ $country }}" @selected(old('country', $customer->country) === $country)>{{ $country }}</option>
-                    @endforeach
-                </select>
+                <div class="dropdown">
+                    <button class="form-select text-start" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" data-country-toggle>
+                        <span data-country-label>
+                            {{ old('country', $customer->country) ?: 'Select country' }}
+                        </span>
+                    </button>
+                    <div class="dropdown-menu w-100 p-2">
+                        <input type="text" class="form-control mb-2" placeholder="Search country" data-country-filter>
+                        <div class="d-flex flex-column gap-1" style="max-height: 240px; overflow-y: auto;">
+                            @foreach ($countries as $country)
+                                <button type="button" class="dropdown-item" data-country-option="{{ $country }}">{{ $country }}</button>
+                            @endforeach
+                        </div>
+                    </div>
+                    <input type="hidden" name="country" value="{{ old('country', $customer->country) }}" data-country-value>
+                </div>
                 <x-input-error for="country" />
             </div>
             <div class="col-md-6">
@@ -126,7 +136,7 @@
             <div class="col-12 d-flex gap-2">
                 <button class="btn btn-primary" type="submit">Save</button>
                 <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">Cancel</a>
-                <a href="{{ route('customers.index') }}" class="btn btn-link">Back</a>
+                <a href="{{ route('customers.index') }}" class="btn btn-outline-secondary">Back</a>
             </div>
         </div>
     </div>
@@ -142,6 +152,44 @@
             input.name = 'phones[]';
             input.className = 'form-control mb-2';
             container.appendChild(input);
+        });
+    });
+
+    document.querySelectorAll('[data-country-toggle]').forEach(function (toggle) {
+        var dropdown = toggle.closest('.dropdown');
+        if (!dropdown) {
+            return;
+        }
+
+        var label = dropdown.querySelector('[data-country-label]');
+        var hiddenInput = dropdown.querySelector('[data-country-value]');
+        var filterInput = dropdown.querySelector('[data-country-filter]');
+        var options = Array.from(dropdown.querySelectorAll('[data-country-option]'));
+
+        options.forEach(function (option) {
+            option.addEventListener('click', function () {
+                var value = option.getAttribute('data-country-option') || '';
+                hiddenInput.value = value;
+                label.textContent = value || 'Select country';
+                filterInput.value = '';
+                options.forEach(function (item) {
+                    item.classList.remove('d-none');
+                });
+            });
+        });
+
+        filterInput.addEventListener('input', function () {
+            var query = filterInput.value.toLowerCase();
+            options.forEach(function (option) {
+                var text = option.textContent.toLowerCase();
+                option.classList.toggle('d-none', query && !text.includes(query));
+            });
+        });
+
+        toggle.addEventListener('click', function () {
+            setTimeout(function () {
+                filterInput.focus();
+            }, 0);
         });
     });
 </script>

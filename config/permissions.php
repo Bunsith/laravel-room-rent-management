@@ -13,6 +13,7 @@ return [
                 'rooms.manage' => 'Create, update, and delete rooms',
                 'floors.manage' => 'Manage floors',
                 'room_types.manage' => 'Manage room types',
+                'facilities.manage' => 'Manage facilities',
             ],
         ],
         'customers' => [
@@ -65,6 +66,7 @@ return [
             'rooms.manage' => true,
             'floors.manage' => true,
             'room_types.manage' => true,
+            'facilities.manage' => true,
             'customers.view' => true,
             'customers.manage' => true,
             'rentals.view' => true,
