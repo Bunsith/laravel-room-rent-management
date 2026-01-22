@@ -20,6 +20,7 @@
             <div>
                 <label class="form-label small text-muted mb-1">Quick Range</label>
                 <select name="range" class="form-select">
+                    <option value="" @selected(request('start') && request('end'))>Custom range</option>
                     @foreach ([7, 30, 90, 180] as $value)
                         <option value="{{ $value }}" @selected(!request('start') && !request('end') && request('range', 30) == $value)>
                             Last {{ $value }} days
@@ -186,3 +187,33 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const startInput = document.querySelector('input[name="start"]');
+            const endInput = document.querySelector('input[name="end"]');
+            const rangeSelect = document.querySelector('select[name="range"]');
+
+            if (!startInput || !endInput || !rangeSelect) {
+                return;
+            }
+
+            rangeSelect.addEventListener('change', () => {
+                if (rangeSelect.value) {
+                    startInput.value = '';
+                    endInput.value = '';
+                }
+            });
+
+            const handleCustomRange = () => {
+                if (startInput.value || endInput.value) {
+                    rangeSelect.value = '';
+                }
+            };
+
+            startInput.addEventListener('change', handleCustomRange);
+            endInput.addEventListener('change', handleCustomRange);
+        });
+    </script>
+@endpush
