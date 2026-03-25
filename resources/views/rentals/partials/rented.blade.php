@@ -1,5 +1,5 @@
-<div class="card">
-    <div class="card-header bg-white">
+<div class="card rr-data-card">
+    <div class="card-header">
         <h5 class="mb-0">Rented Rooms</h5>
     </div>
     <div class="card-body p-3">
@@ -24,7 +24,7 @@
                             <td>{{ $rental->rent_date?->format('Y-m-d') }}</td>
                             <td>{{ $rental->room->name ?? '-' }}</td>
                             <td>
-                                <span class="badge bg-primary">
+                                <span class="badge badge-soft">
                                     {{ number_format($rental->room_fee, 2) }} {{ $rental->room->currency ?? 'USD' }} / {{ $rental->room->stay_type ?? 'Month' }}
                                 </span>
                             </td>
@@ -45,19 +45,21 @@
                                 <input type="date" name="expected_check_out" class="form-control"
                                     value="{{ $rental->expected_check_out?->format('Y-m-d') }}" form="rental-form-{{ $rental->id }}">
                             </td>
-                            <td class="d-flex gap-2">
+                            <td>
                                 @can('rentals.manage')
-                                    <form method="post" action="{{ route('rentals.update', $rental) }}" id="rental-form-{{ $rental->id }}">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button class="btn btn-sm btn-primary action-btn" type="submit">
-                                            <i class="bi bi-save"></i>
-                                        </button>
-                                    </form>
-                                    <form method="post" action="{{ route('rentals.checkout', $rental) }}">
-                                        @csrf
-                                        <button class="btn btn-sm btn-danger action-btn" type="submit">Check Out</button>
-                                    </form>
+                                    <div class="rr-inline-actions">
+                                        <form method="post" action="{{ route('rentals.update', $rental) }}" id="rental-form-{{ $rental->id }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button class="btn btn-sm btn-primary action-btn" type="submit">
+                                                <i class="bi bi-save"></i>
+                                            </button>
+                                        </form>
+                                        <form method="post" action="{{ route('rentals.checkout', $rental) }}">
+                                            @csrf
+                                            <button class="btn btn-sm btn-danger action-btn" type="submit">Check Out</button>
+                                        </form>
+                                    </div>
                                 @endcan
                             </td>
                         </tr>

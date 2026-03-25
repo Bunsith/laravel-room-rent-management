@@ -5,12 +5,12 @@
 @section('content')
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
-            <div class="card">
+            <div class="card rr-data-card">
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
                         <div class="rr-auth-mark">RR</div>
                         <h4 class="mt-3 mb-0">Welcome Back</h4>
-                        <small class="text-muted">Sign in to manage rentals</small>
+                        <small class="text-muted">Sign in to continue managing rentals and operations.</small>
                     </div>
                     <form method="post" action="{{ route('login.store') }}">
                         @csrf
@@ -29,9 +29,9 @@
                                 <input class="form-check-input" type="checkbox" name="remember" id="remember">
                                 <label class="form-check-label" for="remember">Remember me</label>
                             </div>
-                            <a href="{{ route('password.request') }}" class="small">Reset password</a>
+                            <a href="{{ route('password.request') }}" class="small">Forgot password?</a>
                         </div>
-                        <button class="btn btn-primary w-100" type="submit">Login</button>
+                        <button class="btn btn-primary w-100" type="submit">Sign In</button>
                     </form>
                 </div>
             </div>

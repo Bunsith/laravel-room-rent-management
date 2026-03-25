@@ -3,28 +3,31 @@
 @section('title', 'Facilities')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="rr-section-head mb-4">
         <div>
             <h2 class="page-title mb-1">Facilities</h2>
-            <p class="text-muted">Manage facilities available for rooms.</p>
+            <p class="text-muted mb-0">Manage facilities available for rooms.</p>
         </div>
         @can('facilities.manage')
             <a href="{{ route('facilities.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-lg me-1"></i>
-                Add New
+                Add Facility
             </a>
         @endcan
     </div>
 
-    <div class="card">
-        <div class="card-header bg-white">
-            <div class="row align-items-center">
-                <div class="col-md-6">
+    <div class="card rr-data-card">
+        <div class="card-header">
+            <div class="rr-card-header-grid">
+                <div>
                     <h5 class="mb-0">Facility List</h5>
                 </div>
-                <div class="col-md-6">
+                <div>
                     <form method="get" class="d-flex justify-content-md-end mt-2 mt-md-0">
-                        <input type="text" name="search" value="{{ $search }}" class="form-control w-50" placeholder="Search facility">
+                        <div class="rr-search-wrap">
+                            <i class="bi bi-search"></i>
+                            <input type="text" name="search" value="{{ $search }}" class="form-control rr-search-input" placeholder="Search facility">
+                        </div>
                     </form>
                 </div>
             </div>

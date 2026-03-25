@@ -5,6 +5,7 @@
 @section('content')
     <div class="form-section">
         <h2 class="page-title mb-3">Add User</h2>
+        <p class="rr-form-subtitle">Create a new staff or admin account and assign the correct role.</p>
         <form method="post" action="{{ route('users.store') }}">
             @csrf
             @include('users._form')

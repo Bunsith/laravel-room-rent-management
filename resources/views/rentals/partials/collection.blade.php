@@ -1,5 +1,5 @@
-<div class="card">
-    <div class="card-header bg-white">
+<div class="card rr-data-card">
+    <div class="card-header">
         <h5 class="mb-0">Rental Collection</h5>
     </div>
     @php
@@ -85,19 +85,21 @@
                                     {{ number_format($invoice->due_amount, 2) }}
                                 </span>
                             </td>
-                            <td class="d-flex gap-1">
+                            <td>
                                 @can('collections.manage')
                                     <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-primary action-btn">Pay</a>
                                 @endcan
-                                <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-outline-secondary action-btn">Detail</a>
-                                @can('collections.manage')
-                                    <form method="post" action="{{ route('invoices.destroy', $invoice) }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger action-btn" type="submit">Delete</button>
-                                    </form>
-                                @endcan
-                                <a href="{{ route('invoices.print', $invoice) }}" class="btn btn-sm btn-outline-primary action-btn">Invoice</a>
+                                <div class="rr-inline-actions">
+                                    <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-outline-secondary action-btn">Detail</a>
+                                    @can('collections.manage')
+                                        <form method="post" action="{{ route('invoices.destroy', $invoice) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger action-btn" type="submit">Delete</button>
+                                        </form>
+                                    @endcan
+                                    <a href="{{ route('invoices.print', $invoice) }}" class="btn btn-sm btn-outline-primary action-btn">Invoice</a>
+                                </div>
                             </td>
                         </tr>
                     @empty

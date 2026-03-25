@@ -6,20 +6,20 @@
     <title>@yield('title', 'Room Rental')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
     <nav class="navbar navbar-expand-lg rr-navbar navbar-light">
-        <div class="container-fluid">
+        <div class="container-fluid px-3">
             <a class="navbar-brand rr-brand" href="{{ route('dashboard') }}">ROOM RENTAL</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills rr-main-nav">
                     @can('rooms.view')
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}" href="{{ route('rooms.index') }}">Room</a>
@@ -56,13 +56,13 @@
                         </li>
                     @endcan
                 </ul>
-                <ul class="navbar-nav ms-auto align-items-lg-center">
+                <ul class="navbar-nav ms-auto align-items-lg-center rr-user-nav">
                     <li class="nav-item d-flex align-items-center me-3 rr-welcome">
                         <i class="bi bi-person-circle me-2"></i>
                         <span>Welcome, {{ auth()->user()->name ?? 'User' }}</span>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle rr-settings-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-gear me-1"></i>
                             Settings
                         </a>

@@ -22,7 +22,7 @@
             <h2 class="page-title mb-1">Invoice Detail</h2>
             <div class="d-flex align-items-center gap-2 flex-wrap text-muted">
                 <span class="fw-semibold text-dark">Invoice {{ $invoice->invoice_no }}</span>
-                <span class="badge bg-{{ $statusClass }}">{{ strtoupper($invoice->status) }}</span>
+                <span class="badge {{ $statusClass === 'success' ? 'badge-soft-success' : ($statusClass === 'warning' ? 'badge-soft-warning' : 'badge-soft-danger') }}">{{ strtoupper($invoice->status) }}</span>
                 <span class="small">Issued {{ $invoice->invoice_date?->format('Y-m-d') }}</span>
             </div>
         </div>
@@ -61,7 +61,7 @@
     <div class="row g-4">
         <div class="col-lg-8">
             <div class="card mb-4">
-                <div class="card-header bg-white">
+                <div class="card-header">
                     <h5 class="mb-0">Invoice Summary</h5>
                 </div>
                 <div class="card-body">
@@ -95,7 +95,7 @@
             </div>
 
             <div class="card">
-                <div class="card-header bg-white">
+                <div class="card-header">
                     <h5 class="mb-0">Charges Breakdown</h5>
                 </div>
                 <div class="card-body p-3">
@@ -139,7 +139,7 @@
             </div>
 
             <div class="card mt-4">
-                <div class="card-header bg-white">
+                <div class="card-header">
                     <h5 class="mb-0">Payment History</h5>
                 </div>
                 <div class="card-body p-3">
@@ -174,7 +174,7 @@
         </div>
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header bg-white">
+                <div class="card-header">
                     <h5 class="mb-0">Record Payment</h5>
                 </div>
                 <div class="card-body">

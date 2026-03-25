@@ -3,28 +3,31 @@
 @section('title', 'Customers')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="rr-section-head mb-4">
         <div>
             <h2 class="page-title mb-1">Customer List</h2>
-            <p class="text-muted">Manage customer profiles and documents.</p>
+            <p class="text-muted mb-0">Manage customer profiles and documents.</p>
         </div>
         @can('customers.manage')
             <a href="{{ route('customers.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-lg me-1"></i>
-                Add New
+                Add Customer
             </a>
         @endcan
     </div>
 
-    <div class="card">
-        <div class="card-header bg-white">
-            <div class="row align-items-center">
-                <div class="col-md-6">
+    <div class="card rr-data-card">
+        <div class="card-header">
+            <div class="rr-card-header-grid">
+                <div>
                     <h5 class="mb-0">Customers</h5>
                 </div>
-                <div class="col-md-6">
+                <div>
                     <form method="get" class="d-flex justify-content-md-end mt-2 mt-md-0">
-                        <input type="text" name="search" value="{{ $search }}" class="form-control w-50" placeholder="Search customer">
+                        <div class="rr-search-wrap">
+                            <i class="bi bi-search"></i>
+                            <input type="text" name="search" value="{{ $search }}" class="form-control rr-search-input" placeholder="Search customer">
+                        </div>
                     </form>
                 </div>
             </div>
@@ -56,7 +59,7 @@
                                 <td>{{ $customers->firstItem() + $index }}</td>
                                 <td>
                                     <img src="{{ $customer->photo ? \Illuminate\Support\Facades\Storage::url($customer->photo) : 'https://via.placeholder.com/40' }}"
-                                         alt="Photo" class="rounded-circle" width="40" height="40">
+                                         alt="Photo" class="rr-avatar">
                                 </td>
                                 <td>{{ $customer->full_name }}</td>
                                 <td>{{ $customer->document->national_id ?? '-' }}</td>
@@ -70,24 +73,26 @@
                                 <td>
                                     @php($attachments = $customer->document->attachment_file ?? [])
                                     @if (!empty($attachments))
-                                        <a href="{{ \Illuminate\Support\Facades\Storage::url($attachments[0]) }}" target="_blank">{{ basename($attachments[0]) }}</a>
+                                        <a href="{{ \Illuminate\Support\Facades\Storage::url($attachments[0]) }}" target="_blank" class="rr-attachment-link">{{ basename($attachments[0]) }}</a>
                                     @else
                                         -
                                     @endif
                                 </td>
-                                <td>{{ \Illuminate\Support\Str::limit($customer->note, 20) }}</td>
-                                <td class="d-flex gap-1">
+                                <td class="rr-cell-note">{{ \Illuminate\Support\Str::limit($customer->note, 20) }}</td>
+                                <td>
                                     @can('customers.manage')
-                                        <a href="{{ route('customers.edit', $customer) }}" class="btn btn-sm btn-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form method="post" action="{{ route('customers.destroy', $customer) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger action-btn" type="submit">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
+                                        <div class="rr-inline-actions">
+                                            <a href="{{ route('customers.edit', $customer) }}" class="btn btn-sm btn-primary action-btn">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <form method="post" action="{{ route('customers.destroy', $customer) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-danger action-btn" type="submit">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     @endcan
                                 </td>
                             </tr>

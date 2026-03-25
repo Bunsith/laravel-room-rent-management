@@ -1,8 +1,8 @@
 <div class="row g-4">
     @can('journal.manage')
         <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div class="card rr-data-card">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
                     <div>
                         <h5 class="mb-1">New Journal Entry</h5>
                         <small class="text-muted">Record cash flow, adjustments, and supporting references.</small>
@@ -93,8 +93,8 @@
         </div>
     @endcan
     <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-white">
+        <div class="card rr-data-card">
+            <div class="card-header">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
                     <div>
                         <h5 class="mb-1">Entries</h5>
@@ -104,11 +104,9 @@
                     </div>
                     <form method="get" class="d-flex flex-wrap align-items-center gap-2">
                         <input type="hidden" name="tab" value="journal">
-                        <div class="input-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input type="text" name="search" class="form-control" placeholder="Search note" value="{{ request('search') }}">
+                        <div class="rr-search-wrap">
+                            <i class="bi bi-search"></i>
+                            <input type="text" name="search" class="form-control rr-search-input" placeholder="Search note" value="{{ request('search') }}">
                         </div>
                         <button class="btn btn-outline-secondary" type="submit">Search</button>
                         <a class="btn btn-light" href="{{ route('rentals.index', ['tab' => 'journal']) }}">Reset</a>
@@ -153,15 +151,17 @@
                                             -
                                         @endif
                                     </td>
-                                    <td class="d-flex gap-1">
+                                    <td>
                                         @can('journal.manage')
-                                            <form method="post" action="{{ route('journal-entries.destroy', $entry) }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-danger action-btn" type="submit">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
+                                            <div class="rr-inline-actions">
+                                                <form method="post" action="{{ route('journal-entries.destroy', $entry) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-sm btn-danger action-btn" type="submit">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         @endcan
                                     </td>
                                 </tr>

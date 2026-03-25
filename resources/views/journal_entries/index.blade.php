@@ -3,17 +3,17 @@
 @section('title', 'Journal Entries')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="rr-section-head mb-4">
         <div>
             <h2 class="page-title mb-1">Journal Entries</h2>
-            <p class="text-muted">Track account movements and expenses.</p>
+            <p class="text-muted mb-0">Track account movements and expenses.</p>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header bg-white">
+            <div class="card rr-data-card">
+                <div class="card-header">
                     <h5 class="mb-0">New Entry</h5>
                 </div>
                 <div class="card-body">
@@ -90,12 +90,17 @@
             </div>
         </div>
         <div class="col-lg-8">
-            <div class="card">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Entries</h5>
-                    <form method="get" class="w-50">
-                        <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Search note">
-                    </form>
+            <div class="card rr-data-card">
+                <div class="card-header">
+                    <div class="rr-card-header-grid">
+                        <h5 class="mb-0">Entries</h5>
+                        <form method="get" class="d-flex justify-content-md-end">
+                            <div class="rr-search-wrap">
+                                <i class="bi bi-search"></i>
+                                <input type="text" name="search" value="{{ $search }}" class="form-control rr-search-input" placeholder="Search note">
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div class="card-body p-3">
                     <div class="table-responsive">
@@ -130,20 +135,22 @@
                                                 -
                                             @endif
                                         </td>
-                                <td class="d-flex gap-1">
-                                    @can('journal.manage')
-                                        <button class="btn btn-sm btn-outline-secondary action-btn" data-bs-toggle="collapse" data-bs-target="#edit-entry-{{ $entry->id }}">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <form method="post" action="{{ route('journal-entries.destroy', $entry) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger action-btn" type="submit">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    @endcan
-                                </td>
+                                        <td>
+                                            @can('journal.manage')
+                                                <div class="rr-inline-actions">
+                                                    <button class="btn btn-sm btn-outline-secondary action-btn" data-bs-toggle="collapse" data-bs-target="#edit-entry-{{ $entry->id }}">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <form method="post" action="{{ route('journal-entries.destroy', $entry) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-sm btn-danger action-btn" type="submit">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endcan
+                                        </td>
                             </tr>
                             @can('journal.manage')
                                 <tr class="collapse" id="edit-entry-{{ $entry->id }}">

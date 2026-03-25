@@ -3,10 +3,10 @@
 @section('title', 'Role Permissions')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="rr-section-head mb-4">
         <div>
             <h2 class="page-title mb-1">Role Permissions</h2>
-            <p class="text-muted">Control what each role can access in the system.</p>
+            <p class="text-muted mb-0">Control what each role can access in the system.</p>
         </div>
         <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">Back</a>
     </div>
@@ -18,14 +18,14 @@
         @foreach ($roles as $role)
             @php($roleName = $role->name)
             @php($label = $roleLabels[$roleName] ?? ucfirst($roleName))
-            <div class="card mb-4">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="card rr-data-card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="mb-1">{{ $label }}</h5>
                         <small class="text-muted text-uppercase">{{ $roleName }}</small>
                     </div>
                     @if ($roleName === 'admin')
-                        <span class="badge bg-secondary">Full access</span>
+                        <span class="badge badge-soft">Full access</span>
                     @endif
                 </div>
                 <div class="card-body">
@@ -35,7 +35,7 @@
                         <div class="row g-3">
                             @foreach ($permissionGroups as $group)
                                 <div class="col-lg-4 col-md-6">
-                                    <div class="border rounded p-3 h-100">
+                                    <div class="rr-check-grid h-100">
                                         <h6 class="mb-2">{{ $group['label'] }}</h6>
                                         @foreach ($group['permissions'] as $permission => $permissionLabel)
                                             <div class="form-check">
@@ -54,7 +54,7 @@
             </div>
         @endforeach
 
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end rr-form-actions">
             <button class="btn btn-primary" type="submit">Save Permissions</button>
         </div>
     </form>

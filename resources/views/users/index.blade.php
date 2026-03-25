@@ -3,12 +3,12 @@
 @section('title', 'Users')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="rr-section-head mb-4">
         <div>
             <h2 class="page-title mb-1">Users</h2>
-            <p class="text-muted">Manage admin and staff accounts.</p>
+            <p class="text-muted mb-0">Manage admin and staff accounts for secure system access.</p>
         </div>
-        <div class="d-flex gap-2">
+        <div class="rr-toolbar-actions">
             @can('permissions.manage')
                 <a href="{{ route('users.permissions.edit') }}" class="btn btn-outline-secondary">
                     <i class="bi bi-shield-lock me-1"></i>
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card rr-data-card">
         <div class="card-body p-3">
             <div class="table-responsive">
                 <table class="table mb-0">
@@ -38,29 +38,34 @@
                     </thead>
                     <tbody>
                         @forelse ($users as $user)
+                            @php($roleName = strtolower($user->roles->first()?->name ?? $user->role ?? 'staff'))
                             <tr>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>
-                                    <span class="badge bg-secondary">
-                                        {{ ucfirst($user->roles->first()?->name ?? $user->role ?? 'staff') }}
+                                    <span class="badge {{ $roleName === 'admin' ? 'badge-soft-success' : ($roleName === 'manager' ? 'badge-soft-warning' : 'badge-soft') }}">
+                                        {{ ucfirst($roleName) }}
                                     </span>
                                 </td>
-                                <td class="d-flex gap-1">
-                                    @can('users.manage')
-                                        <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                    @endcan
-                                    @can('delete', $user)
-                                        <form method="post" action="{{ route('users.destroy', $user) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger action-btn" type="submit">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    @endcan
+                                <td>
+                                    @if (auth()->user()->can('users.manage') || auth()->user()->can('delete', $user))
+                                        <div class="rr-inline-actions">
+                                            @can('users.manage')
+                                                <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-primary action-btn">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                            @endcan
+                                            @can('delete', $user)
+                                                <form method="post" action="{{ route('users.destroy', $user) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-sm btn-danger action-btn" type="submit">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endcan
+                                        </div>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

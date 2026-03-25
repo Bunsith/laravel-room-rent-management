@@ -1,5 +1,5 @@
-<div class="card">
-    <div class="card-header bg-white">
+<div class="card rr-data-card">
+    <div class="card-header">
         <h5 class="mb-0">Available Rooms</h5>
     </div>
     <div class="card-body p-3">
@@ -33,7 +33,7 @@
                                         <div class="text-muted small">{{ $room->floor->name ?? '' }} - {{ $room->roomType->name ?? '' }}</div>
                                     </div>
                                     <div>
-                                        <span class="badge bg-primary">{{ number_format($room->price, 2) }} {{ $room->currency }} / {{ $room->stay_type }}</span>
+                                        <span class="badge badge-soft">{{ number_format($room->price, 2) }} {{ $room->currency }} / {{ $room->stay_type }}</span>
                                     </div>
                                     <div style="min-width:200px;">
                                         <div class="input-group">
@@ -63,7 +63,7 @@
                                     <div style="min-width:160px;">
                                         <input type="text" name="note" class="form-control" placeholder="Note">
                                     </div>
-                                    <div class="d-flex gap-2">
+                                    <div class="rr-inline-actions">
                                         @can('rentals.manage')
                                             <button class="btn btn-outline-primary" type="submit" name="print" value="1">Save & Print</button>
                                             <button class="btn btn-primary" type="submit">Rent</button>

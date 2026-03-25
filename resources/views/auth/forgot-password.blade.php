@@ -5,13 +5,13 @@
 @section('content')
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
-            <div class="card">
+            <div class="card rr-data-card">
                 <div class="card-body p-4">
                     <div class="text-center mb-3">
                         <div class="rr-auth-mark">RR</div>
                     </div>
                     <h4 class="mb-2">Forgot your password?</h4>
-                    <p class="text-muted">Enter your email and we will send a reset link.</p>
+                    <p class="text-muted mb-3">Enter your email and we will send a secure reset link.</p>
                     <form method="post" action="{{ route('password.email') }}">
                         @csrf
                         <div class="mb-3">
@@ -21,7 +21,7 @@
                         </div>
                         <button class="btn btn-primary w-100" type="submit">Send Reset Link</button>
                         <div class="text-center mt-3">
-                            <a href="{{ route('login') }}">Back to login</a>
+                            <a href="{{ route('login') }}">Back to Sign In</a>
                         </div>
                     </form>
                 </div>

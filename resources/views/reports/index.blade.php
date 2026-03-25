@@ -3,12 +3,20 @@
 @section('title', 'Reports')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    @php
+        $invoiced = (float) ($totals['invoiced'] ?? 0);
+        $paid = (float) ($totals['paid'] ?? 0);
+        $due = (float) ($totals['due'] ?? 0);
+        $collectionRate = $invoiced > 0 ? round(($paid / $invoiced) * 100, 1) : 0;
+    @endphp
+
+    <div class="rr-section-head mb-4">
         <div>
+            <div class="rr-form-kicker">Financial Overview</div>
             <h2 class="page-title mb-1">Reports</h2>
-            <p class="text-muted">Revenue, occupancy, and collections at a glance.</p>
+            <p class="text-muted mb-0">Revenue, occupancy, and collections at a glance.</p>
         </div>
-        <form method="get" class="d-flex flex-wrap gap-2 align-items-end">
+        <form method="get" class="rr-toolbar-actions align-items-end">
             <div>
                 <label class="form-label small text-muted mb-1">Start Date</label>
                 <input type="date" name="start" class="form-control" value="{{ $start }}">
@@ -31,6 +39,9 @@
             <div>
                 <button class="btn btn-primary" type="submit">Apply</button>
             </div>
+            <div>
+                <a class="btn btn-outline-secondary" href="{{ route('reports.index') }}">Reset</a>
+            </div>
         </form>
     </div>
 
@@ -47,6 +58,9 @@
                 <div class="text-muted text-uppercase small">Total Paid</div>
                 <div class="fs-4 fw-bold">{{ number_format($totals['paid'], 2) }}</div>
                 <div class="text-muted small">Payments received</div>
+                <div class="mt-2">
+                    <span class="badge badge-soft-success">Collection Rate {{ number_format($collectionRate, 1) }}%</span>
+                </div>
             </div>
         </div>
         <div class="col-md-3">
@@ -56,6 +70,13 @@
                     {{ number_format($totals['due'], 2) }}
                 </div>
                 <div class="text-muted small">Outstanding balance</div>
+                <div class="mt-2">
+                    @if ($due > 0)
+                        <span class="badge badge-soft-warning">Action Required</span>
+                    @else
+                        <span class="badge badge-soft-success">Cleared</span>
+                    @endif
+                </div>
             </div>
         </div>
         <div class="col-md-3">
@@ -71,9 +92,12 @@
 
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Daily Revenue</h5>
+            <div class="card rr-data-card mb-4">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <h5 class="mb-0">Daily Revenue</h5>
+                        <span class="badge badge-soft">{{ count($dailyRevenue) }} Days</span>
+                    </div>
                 </div>
                 <div class="card-body p-3">
                     <div class="table-responsive">
@@ -101,9 +125,12 @@
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Monthly Revenue</h5>
+            <div class="card rr-data-card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <h5 class="mb-0">Monthly Revenue</h5>
+                        <span class="badge badge-soft">{{ count($monthlyRevenue) }} Months</span>
+                    </div>
                 </div>
                 <div class="card-body p-3">
                     <div class="table-responsive">
@@ -133,8 +160,8 @@
         </div>
 
         <div class="col-lg-4">
-            <div class="card mb-4">
-                <div class="card-header bg-white">
+            <div class="card rr-data-card mb-4">
+                <div class="card-header">
                     <h5 class="mb-0">Collections Status</h5>
                 </div>
                 <div class="card-body p-3">
@@ -151,7 +178,12 @@
                             <tbody>
                                 @foreach ($statusBreakdown as $row)
                                     <tr>
-                                        <td class="text-capitalize">{{ $row['status'] }}</td>
+                                        <td>
+                                            @php($status = strtolower($row['status']))
+                                            <span class="badge {{ $status === 'paid' ? 'badge-soft-success' : ($status === 'partial' ? 'badge-soft-warning' : 'badge-soft-danger') }} text-capitalize">
+                                                {{ $row['status'] }}
+                                            </span>
+                                        </td>
                                         <td class="text-end">{{ $row['count'] }}</td>
                                         <td class="text-end">{{ number_format($row['total'], 2) }}</td>
                                         <td class="text-end">{{ number_format($row['due'], 2) }}</td>
@@ -163,8 +195,8 @@
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header bg-white">
+            <div class="card rr-data-card">
+                <div class="card-header">
                     <h5 class="mb-0">Occupancy Snapshot</h5>
                 </div>
                 <div class="card-body p-3">

@@ -3,19 +3,24 @@
 @section('title', 'Invoices')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="rr-section-head mb-4">
         <div>
             <h2 class="page-title mb-1">Invoices</h2>
-            <p class="text-muted">View invoice history and payments.</p>
+            <p class="text-muted mb-0">View invoice history and payments.</p>
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Invoice List</h5>
-            <form method="get" class="w-50">
-                <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Search invoice">
-            </form>
+    <div class="card rr-data-card">
+        <div class="card-header">
+            <div class="rr-card-header-grid">
+                <h5 class="mb-0">Invoice List</h5>
+                <form method="get" class="d-flex justify-content-md-end">
+                    <div class="rr-search-wrap">
+                        <i class="bi bi-search"></i>
+                        <input type="text" name="search" value="{{ $search }}" class="form-control rr-search-input" placeholder="Search invoice">
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="card-body p-3">
             <div class="table-responsive">
@@ -43,10 +48,20 @@
                                 <td>{{ number_format($invoice->total_amount, 2) }}</td>
                                 <td>{{ number_format($invoice->total_paid, 2) }}</td>
                                 <td>{{ number_format($invoice->due_amount, 2) }}</td>
-                                <td><span class="badge bg-secondary">{{ ucfirst($invoice->status) }}</span></td>
-                                <td class="d-flex gap-1">
-                                    <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-primary action-btn">Detail</a>
-                                    <a href="{{ route('invoices.print', $invoice) }}" class="btn btn-sm btn-outline-primary action-btn">Invoice</a>
+                                <td>
+                                    @if ($invoice->status === 'paid')
+                                        <span class="badge badge-soft-success">{{ ucfirst($invoice->status) }}</span>
+                                    @elseif ($invoice->status === 'partial')
+                                        <span class="badge badge-soft-warning">{{ ucfirst($invoice->status) }}</span>
+                                    @else
+                                        <span class="badge badge-soft-danger">{{ ucfirst($invoice->status) }}</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="rr-inline-actions">
+                                        <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-primary action-btn">Detail</a>
+                                        <a href="{{ route('invoices.print', $invoice) }}" class="btn btn-sm btn-outline-primary action-btn">Invoice</a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

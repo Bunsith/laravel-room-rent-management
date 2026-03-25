@@ -3,10 +3,10 @@
 @section('title', 'Rentals')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="rr-section-head mb-4">
         <div>
             <h2 class="page-title mb-1">Rental Management</h2>
-            <p class="text-muted">Track availability, rentals, collections, and journal entries.</p>
+            <p class="text-muted mb-0">Track availability, rentals, collections, and journal entries.</p>
         </div>
     </div>
 

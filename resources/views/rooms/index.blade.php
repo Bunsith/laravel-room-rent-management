@@ -3,16 +3,16 @@
 @section('title', 'Rooms')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="rr-section-head mb-4">
         <div>
             <h2 class="page-title mb-1">Room List</h2>
-            <p class="text-muted">Manage room inventory and facilities.</p>
+            <p class="text-muted mb-0">Manage room inventory and facilities.</p>
         </div>
-        <div class="d-flex flex-wrap gap-2">
+        <div class="rr-toolbar-actions">
             @can('rooms.manage')
                 <a href="{{ route('rooms.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-lg me-1"></i>
-                    Add New
+                    Add Room
                 </a>
             @endcan
             @can('floors.manage')
@@ -36,15 +36,18 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header bg-white">
-            <div class="row align-items-center">
-                <div class="col-md-6">
+    <div class="card rr-data-card">
+        <div class="card-header">
+            <div class="rr-card-header-grid">
+                <div>
                     <h5 class="mb-0">Rooms</h5>
                 </div>
-                <div class="col-md-6">
+                <div>
                     <form method="get" class="d-flex justify-content-md-end mt-2 mt-md-0">
-                        <input type="text" name="search" value="{{ $search }}" class="form-control w-50" placeholder="Search room">
+                        <div class="rr-search-wrap">
+                            <i class="bi bi-search"></i>
+                            <input type="text" name="search" value="{{ $search }}" class="form-control rr-search-input" placeholder="Search room">
+                        </div>
                     </form>
                 </div>
             </div>
@@ -73,7 +76,7 @@
                                 <td>{{ $room->name }}</td>
                                 <td>{{ $room->roomType->name ?? '-' }}</td>
                                 <td>{{ number_format($room->price, 2) }} {{ $room->currency }}</td>
-                                <td>{{ $room->stay_type }}</td>
+                                <td><span class="badge badge-soft">{{ $room->stay_type }}</span></td>
                                 <td>{{ \Illuminate\Support\Str::limit($room->note, 30) }}</td>
                                 <td>
                                     @foreach ($room->facilities as $facility)

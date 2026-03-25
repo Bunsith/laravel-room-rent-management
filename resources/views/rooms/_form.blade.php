@@ -1,5 +1,6 @@
 <div class="row g-4">
     <div class="col-lg-4">
+        <p class="rr-form-kicker">Visual Asset</p>
         <div class="upload-preview" id="room-photo-preview">
             @if ($room->photo)
                 <img src="{{ \Illuminate\Support\Facades\Storage::url($room->photo) }}" alt="Room photo">
@@ -14,6 +15,8 @@
         <x-input-error for="photo" />
     </div>
     <div class="col-lg-8">
+        <p class="rr-form-kicker">Room Profile</p>
+        <p class="rr-form-subtitle">Capture the key operational details, pricing, and occupancy type for this room.</p>
         <div class="row g-3">
             <div class="col-md-6">
                 <label class="form-label">Floor</label>
@@ -70,7 +73,7 @@
             </div>
             <div class="col-12">
                 <label class="form-label">Facilities</label>
-                <div class="row g-2">
+                <div class="row g-2 rr-check-grid">
                     @foreach ($facilities as $facility)
                         <div class="col-md-4">
                             <div class="form-check">
@@ -83,8 +86,8 @@
                 </div>
                 <x-input-error for="facilities" />
             </div>
-            <div class="col-12 d-flex gap-2">
-                <button class="btn btn-primary" type="submit">Save changes</button>
+            <div class="col-12 d-flex flex-wrap gap-2 rr-form-actions">
+                <button class="btn btn-primary" type="submit">Save</button>
                 <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">Cancel</a>
                 <a href="{{ route('rooms.index') }}" class="btn btn-outline-secondary">Back</a>
             </div>

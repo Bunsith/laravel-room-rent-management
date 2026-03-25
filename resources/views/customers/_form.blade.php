@@ -1,5 +1,6 @@
 <div class="row g-4">
     <div class="col-lg-4">
+        <p class="rr-form-kicker">Identity Media</p>
         <div class="upload-preview" id="customer-photo-preview">
             @if ($customer->photo)
                 <img src="{{ \Illuminate\Support\Facades\Storage::url($customer->photo) }}" alt="Customer photo">
@@ -19,7 +20,12 @@
         </div>
     </div>
     <div class="col-lg-8">
+        <p class="rr-form-kicker">Customer Profile</p>
+        <p class="rr-form-subtitle">Maintain legal identity, occupancy, and contact details in one standardized profile.</p>
         <div class="row g-3">
+            <div class="col-12">
+                <p class="rr-subsection-title mb-0">Personal Information</p>
+            </div>
             <div class="col-md-6">
                 <label class="form-label">First Name</label>
                 <input type="text" name="first_name" class="form-control" value="{{ old('first_name', $customer->first_name) }}" required>
@@ -29,6 +35,9 @@
                 <label class="form-label">Last Name</label>
                 <input type="text" name="last_name" class="form-control" value="{{ old('last_name', $customer->last_name) }}">
                 <x-input-error for="last_name" />
+            </div>
+            <div class="col-12 pt-1">
+                <p class="rr-subsection-title mb-0">Document Details</p>
             </div>
             <div class="col-md-6">
                 <label class="form-label">National ID</label>
@@ -60,6 +69,9 @@
                 <input type="date" name="visa_valid_until" class="form-control" value="{{ old('visa_valid_until', optional($customer->document)->visa_valid_until?->format('Y-m-d')) }}">
                 <x-input-error for="visa_valid_until" />
             </div>
+            <div class="col-12 pt-1">
+                <p class="rr-subsection-title mb-0">Contact & Occupancy</p>
+            </div>
             <div class="col-md-6">
                 <label class="form-label">Date of Birth</label>
                 <input type="date" name="dob" class="form-control" value="{{ old('dob', $customer->dob?->format('Y-m-d')) }}">
@@ -79,7 +91,7 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Phone</label>
-                <div id="phone-fields">
+                <div id="phone-fields" class="rr-check-grid">
                     @php($phones = old('phones', $customer->phones?->pluck('phone')->toArray() ?? ['']))
                     @foreach ($phones as $phone)
                         <input type="text" name="phones[]" class="form-control mb-2" value="{{ $phone }}">
@@ -133,7 +145,7 @@
                 <textarea name="note" class="form-control" rows="2">{{ old('note', $customer->note) }}</textarea>
                 <x-input-error for="note" />
             </div>
-            <div class="col-12 d-flex gap-2">
+            <div class="col-12 d-flex flex-wrap gap-2 rr-form-actions">
                 <button class="btn btn-primary" type="submit">Save</button>
                 <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">Cancel</a>
                 <a href="{{ route('customers.index') }}" class="btn btn-outline-secondary">Back</a>
