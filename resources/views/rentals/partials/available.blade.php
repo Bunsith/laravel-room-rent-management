@@ -1,6 +1,12 @@
 <div class="card rr-data-card">
     <div class="card-header">
-        <h5 class="mb-0">Available Rooms</h5>
+        <div class="d-flex justify-content-between align-items-center gap-2">
+            <div>
+                <h5 class="mb-0">Available Rooms</h5>
+                <small class="text-muted">Create new rental contracts from currently open units.</small>
+            </div>
+            <span class="badge badge-soft">{{ $availableRooms->count() }} Rooms</span>
+        </div>
     </div>
     <div class="card-body p-3">
         <div class="table-responsive">
@@ -65,7 +71,7 @@
                                     </div>
                                     <div class="rr-inline-actions">
                                         @can('rentals.manage')
-                                            <button class="btn btn-outline-primary" type="submit" name="print" value="1">Save & Print</button>
+                                            <button class="btn btn-outline-primary" type="submit" name="print" value="1">Save + Print</button>
                                             <button class="btn btn-primary" type="submit">Rent</button>
                                         @endcan
                                     </div>

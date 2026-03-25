@@ -1,6 +1,12 @@
 <div class="card rr-data-card">
     <div class="card-header">
-        <h5 class="mb-0">Rental Collection</h5>
+        <div class="d-flex justify-content-between align-items-center gap-2">
+            <div>
+                <h5 class="mb-0">Rental Collection</h5>
+                <small class="text-muted">Track utility-based billing and payment status per invoice.</small>
+            </div>
+            <span class="badge badge-soft">{{ $invoices->total() }} Invoices</span>
+        </div>
     </div>
     @php
         $waterRate = (float) ($setting?->water_rate ?? 0.75);
@@ -87,7 +93,7 @@
                             </td>
                             <td>
                                 @can('collections.manage')
-                                    <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-primary action-btn">Pay</a>
+                                    <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-primary action-btn">Record Payment</a>
                                 @endcan
                                 <div class="rr-inline-actions">
                                     <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-outline-secondary action-btn">Detail</a>
@@ -98,7 +104,7 @@
                                             <button class="btn btn-sm btn-danger action-btn" type="submit">Delete</button>
                                         </form>
                                     @endcan
-                                    <a href="{{ route('invoices.print', $invoice) }}" class="btn btn-sm btn-outline-primary action-btn">Invoice</a>
+                                    <a href="{{ route('invoices.print', $invoice) }}" class="btn btn-sm btn-outline-primary action-btn">Print</a>
                                 </div>
                             </td>
                         </tr>

@@ -75,7 +75,7 @@
                                 <input type="file" name="attachment" class="form-control">
                             </div>
                             <div class="col-12 d-flex flex-wrap justify-content-end gap-2">
-                                <button class="btn btn-primary" type="submit">Save</button>
+                                <button class="btn btn-primary" type="submit">Save Entry</button>
                                 <button class="btn btn-outline-secondary" type="reset">Cancel</button>
                             </div>
                         </div>
@@ -102,6 +102,7 @@
                             Showing {{ $journalEntries->firstItem() ?? 0 }}-{{ $journalEntries->lastItem() ?? 0 }} of {{ $journalEntries->total() }}
                         </small>
                     </div>
+                    <span class="badge badge-soft">{{ $journalEntries->total() }} Records</span>
                     <form method="get" class="d-flex flex-wrap align-items-center gap-2">
                         <input type="hidden" name="tab" value="journal">
                         <div class="rr-search-wrap">

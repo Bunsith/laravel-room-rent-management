@@ -1,6 +1,12 @@
 <div class="card rr-data-card">
     <div class="card-header">
-        <h5 class="mb-0">Rented Rooms</h5>
+        <div class="d-flex justify-content-between align-items-center gap-2">
+            <div>
+                <h5 class="mb-0">Rented Rooms</h5>
+                <small class="text-muted">Adjust live contracts and manage checkout schedules.</small>
+            </div>
+            <span class="badge badge-soft-warning">{{ $rentals->total() }} Active</span>
+        </div>
     </div>
     <div class="card-body p-3">
         <div class="table-responsive">
@@ -57,7 +63,7 @@
                                         </form>
                                         <form method="post" action="{{ route('rentals.checkout', $rental) }}">
                                             @csrf
-                                            <button class="btn btn-sm btn-danger action-btn" type="submit">Check Out</button>
+                                            <button class="btn btn-sm btn-danger action-btn" type="submit">Checkout</button>
                                         </form>
                                     </div>
                                 @endcan
